@@ -12,12 +12,12 @@ export default new Vuex.Store({
         to: "/"
       },
       {
-        text: "About",
-        to: "/about"
-      },
-      {
         text: "Szyfr Podstawieniowy Prosty",
         to: "/szyfr_podstawieniowy_prosty"
+      },
+      {
+        text: "About",
+        to: "/about"
       }
     ]
   },

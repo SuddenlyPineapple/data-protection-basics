@@ -1,5 +1,9 @@
 <template>
   <v-container>
+    <v-row>
+      <Encryption />
+      <Decryption />
+    </v-row>
     <code class="pa-2">
       <pre>
     Szyfr Podstawieniowy Prosty - z wybranym kluczem (najpierw dodawany jest klucz potem alfabet)
@@ -12,3 +16,14 @@
     </code>
   </v-container>
 </template>
+
+<script>
+export default {
+  name: "SzyfrPodstawieniowyProsty",
+  components: {
+    Encryption: () => import("@/components/Encryption.vue"),
+    Decryption: () => import("@/components/Decryption.vue")
+  },
+  data: () => ({})
+};
+</script>
