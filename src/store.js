@@ -12,8 +12,8 @@ export default new Vuex.Store({
         to: "/"
       },
       {
-        text: "Szyfr Podstawieniowy Prosty",
-        to: "/szyfr_podstawieniowy_prosty"
+        text: "Simple Substitution Cipher",
+        to: "/simple_substitution_cipher"
       },
       {
         text: "About",
