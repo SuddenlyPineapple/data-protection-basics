@@ -18,6 +18,17 @@
       <Encryption v-bind:encryptionKey="encryptionKey" />
       <Decryption v-bind:decryptionKey="encryptionKey" />
     </v-row>
+    <v-row>
+      <v-col cols="12">
+        <h1>How to use?</h1>
+        <p>
+          Simply generate key or type one of your own. Key is binded to
+          textareas, so when you want to encrypt or decrypt message it will use
+          the same decryption key. Then start encrypting or decrypting your
+          messages just typing then in text areas.
+        </p>
+      </v-col>
+    </v-row>
     <code class="pa-2">
       <pre>
     Szyfr Podstawieniowy Prosty - z wybranym kluczem (najpierw dodawany jest klucz potem alfabet)

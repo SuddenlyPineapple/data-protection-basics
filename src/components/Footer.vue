@@ -16,9 +16,10 @@
       <v-row>
         <v-col cols="12" md="9" class="px-5">
           <v-card-text class="white--text pt-0 text-left">
-            Projekt na zajęcia z Podstaw Ochrony Danych na Politechnice
-            Poznańskiej. Materiał obejmuje w głównej mierze zagadnienia z
-            dziedziny jaką jest kryptografia i kryptoanaliza.
+            Project for classes on the Basics of Data Protection at the Poznan
+            University of Technology. The material mainly covers issues in the
+            field of cryptography and cryptanalysis. It is also good code base &
+            user interface example for other projects from that subject.
           </v-card-text>
         </v-col>
         <v-col cols="12" md="3" class="max-height pt-0">
