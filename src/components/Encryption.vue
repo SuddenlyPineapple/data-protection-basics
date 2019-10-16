@@ -23,6 +23,15 @@ export default {
     textToEncrypt: "",
     encryptedText: ""
   }),
+  watch: {
+    $props: {
+      handler() {
+        this.encrypt();
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   methods: {
     encrypt() {
       this.encryptedText = "";

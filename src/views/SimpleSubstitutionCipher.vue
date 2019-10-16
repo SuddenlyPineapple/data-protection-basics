@@ -10,13 +10,26 @@
           counter="26"
           label="Encryption key"
           v-model="encryptionKey"
+          v-on:keyup="genKey"
         ></v-text-field>
-        <v-btn color="purple" class="white--text" v-on:click="GenRandKey"
-          >GENERATE KEY</v-btn
+        <v-btn
+          color="purple"
+          class="white--text mr-5"
+          v-on:click="generateRandomKey"
         >
+          GENERATE KEY
+        </v-btn>
+        <v-btn
+          color="purple"
+          class="white--text"
+          v-on:click="fillKey"
+          v-bind:disabled="fillDisabled"
+        >
+          FILL KEY
+        </v-btn>
       </v-col>
-      <Encryption v-bind:encryptionKey="encryptionKey" />
-      <Decryption v-bind:decryptionKey="encryptionKey" />
+      <Encryption v-bind:encryptionKey="passedKey" />
+      <Decryption v-bind:decryptionKey="passedKey" />
     </v-row>
     <v-row>
       <v-col cols="12">
@@ -50,10 +63,13 @@ export default {
     Decryption: () => import("@/components/Decryption.vue")
   },
   data: () => ({
-    encryptionKey: ""
+    encryptionKey: "",
+    passedKey: "",
+    chars: "",
+    fillDisabled: false
   }),
   methods: {
-    GenRandKey() {
+    generateRandomKey() {
       var keychars = "abcdefghijklmnopqrstuvwxyz";
       var chars = keychars.split("");
       this.encryptionKey = "";
@@ -63,6 +79,38 @@ export default {
         this.encryptionKey += chars[index];
         chars.splice(index, 1);
       }
+      this.passedKey = this.encryptionKey;
+      this.fillDisabled = true;
+    },
+    genKey() {
+      var keychars = "abcdefghijklmnopqrstuvwxyz";
+      var chars = keychars.split("");
+
+      console.log(this.encryptionKey.length);
+
+      const distinct = (value, index, self) => {
+        return self.indexOf(value) === index;
+      };
+
+      var tmpKey = this.encryptionKey.split("").filter(distinct);
+
+      for (let i = 0; i < this.encryptionKey.length; i++) {
+        for (let g = 0; g < chars.length; g++) {
+          if (this.encryptionKey[i] == chars[g]) {
+            chars.splice(g, 1);
+          }
+        }
+      }
+      console.log(chars.join(""));
+      console.log("Passed key: ", tmpKey.join("") + chars.join(""));
+
+      this.passedKey = tmpKey.join("") + chars.join("");
+      this.chars = chars.join("");
+      this.fillDisabled = false;
+    },
+    fillKey() {
+      this.encryptionKey += this.chars;
+      this.fillDisabled = true;
     }
   }
 };

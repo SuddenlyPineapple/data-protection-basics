@@ -23,6 +23,15 @@ export default {
     textToDecrypt: "",
     decryptedText: ""
   }),
+  watch: {
+    $props: {
+      handler() {
+        this.decrypt();
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   methods: {
     decrypt() {
       this.textToDecrypt = this.textToDecrypt.toLowerCase();
