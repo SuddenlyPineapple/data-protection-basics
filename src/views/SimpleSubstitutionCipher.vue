@@ -7,7 +7,6 @@
           color="deep-purple"
           clearable
           clear-icon="mdi-close-circle"
-          counter="26"
           label="Encryption key"
           v-model="encryptionKey"
           v-on:keyup="genKey"
@@ -42,16 +41,63 @@
         </p>
       </v-col>
     </v-row>
-    <code class="pa-2">
-      <pre>
-    Szyfr Podstawieniowy Prosty - z wybranym kluczem (najpierw dodawany jest klucz potem alfabet)
-    3.5 - str.75 w skrypcie z numerkiem (gdzieś będzie skan):
-        1) Szyfrator
-        2) Deszyfrator
-        3) Zabezpiecznie wejścia
-    opis algorytmu w README - na stronie
-      </pre>
-    </code>
+    <v-row>
+      <v-col cols="12">
+        <h1>How algorithm works?</h1>
+        <p>
+          The whole algorithm consists of changing the alphabet and is very
+          simple. Let's assume we want to encrypt our message with key
+          <code>tost</code><br />
+          Soo our encrption alphabet look like this: <br />
+        </p>
+        <pre>
+          <i>
+    plain alphabet : abcdefghijklmnopqrstuvwxyz
+    cipher alphabet: tosabcdefghijklmnpqruvwxyz
+          </i>
+        </pre>
+        <p>
+          As you can see we ommit duplicated letter and fill our key with next
+          unused letters. An example encryption using the above key will be
+          looking like this:
+        </p>
+        <pre>
+          <i>
+    plain text : defend the castle
+    cipher text: abcbka reb stqrib
+          </i>
+        </pre>
+        <p>
+          Soo simple, now you can start encrypting messeges of your own 😉
+        </p>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <h1>Specification & restrictions:</h1>
+        <ul>
+          <li>only english alphabet consisting of 26 chars,</li>
+          <li>
+            it's possible to use special chars and chars specified for different
+            languages but they won't be encrypted,
+          </li>
+          <li>
+            whole application is executing in your browser and hosted from
+            GitHub Pages, development happen on node server and with help of
+            webpack and npm,
+          </li>
+          <li>
+            ... whole project base is Vue framework with Vuetify as styling
+            dependency,
+          </li>
+          <li>
+            when it's comes to how much text you can encypt this is only limited
+            by your browser and hardware possibilites, but in case of more than
+            500 characters aplication performance pike down.
+          </li>
+        </ul>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

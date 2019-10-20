@@ -21,6 +21,10 @@
             field of cryptography and cryptanalysis. It is also good code base &
             user interface example for other projects from that subject.
           </v-card-text>
+          <v-card-text class="white--text pt-0 text-left">
+            Made with 💖 using <strong>Vue</strong> and
+            <strong>Vuetify.</strong>
+          </v-card-text>
         </v-col>
         <v-col cols="12" md="3" class="max-height pt-0">
           <v-img
