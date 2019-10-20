@@ -1,4 +1,7 @@
 # data-protection-basics
+[![Build Status](https://travis-ci.org/SuddenlyPineapple/data-protection-basics.svg?branch=master)](https://travis-ci.org/SuddenlyPineapple/data-protection-basics.svg?branch=master) 
+## Note
+This is only for development purpose documentation. For cipher documentation go to the app in link above. 
 
 ## Project setup
 ```
