@@ -7,7 +7,9 @@
           color="deep-purple"
           clearable
           clear-icon="mdi-close-circle"
+          prepend-icon="mdi-pen"
           label="Encryption key"
+          :rules="[rules.required, rules.alphabet]"
           v-model="encryptionKey"
           v-on:keyup="genKey"
         ></v-text-field>
@@ -77,6 +79,7 @@
         <h1>Specification & restrictions:</h1>
         <ul>
           <li>only english alphabet consisting of 26 chars,</li>
+          <li>you can also optionaly upload txt files</li>
           <li>
             it's possible to use special chars and chars specified for different
             languages but they won't be encrypted,
@@ -112,7 +115,14 @@ export default {
     encryptionKey: "",
     passedKey: "",
     chars: "",
-    fillDisabled: false
+    fillDisabled: false,
+    rules: {
+      required: value => !!value || "Required!",
+      alphabet: value => {
+        const pattern = /^[abcdefghijklmnopqrstuvwxyz]+$/;
+        return pattern.test(value) || "Invalid character!";
+      }
+    }
   }),
   methods: {
     generateRandomKey() {
@@ -155,7 +165,8 @@ export default {
       this.fillDisabled = false;
     },
     fillKey() {
-      this.encryptionKey += this.chars;
+      //this.encryptionKey += this.chars;
+      this.encryptionKey = this.passedKey;
       this.fillDisabled = true;
     }
   }

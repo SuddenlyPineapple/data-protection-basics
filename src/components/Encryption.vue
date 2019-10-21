@@ -6,11 +6,29 @@
       clearable
       clear-icon="mdi-close-circle"
       label="Text to encrypt"
-      rows="1"
+      rows="2"
+      prepend-icon="mdi-pen"
       v-model="textToEncrypt"
       v-on:keyup="encrypt()"
       @click:clear="clear()"
     ></v-textarea>
+    <template>
+      <v-file-input
+        v-model="file"
+        placeholder="Upload your txt file"
+        label="File input (Optional)"
+        accept=".txt"
+        prepend-icon="mdi-paperclip"
+        show-size
+        @change="loadTextFromFile"
+      >
+        <template v-slot:selection="{ text }">
+          <v-chip small label color="purple">
+            {{ text }}
+          </v-chip>
+        </template>
+      </v-file-input>
+    </template>
     <p>{{ encryptedText }}</p>
   </v-col>
 </template>
@@ -21,7 +39,8 @@ export default {
   props: ["encryptionKey"],
   data: () => ({
     textToEncrypt: "",
-    encryptedText: ""
+    encryptedText: "",
+    file: null
   }),
   watch: {
     $props: {
@@ -60,6 +79,17 @@ export default {
     clear() {
       this.textToEncrypt = "";
       this.encryptedText = "";
+    },
+    loadTextFromFile() {
+      const file = this.file;
+      const reader = new FileReader();
+
+      //reader.onload = e => this.$emit("load", e.target.result);
+      reader.onload = e => {
+        this.textToEncrypt = e.target.result;
+        this.encrypt();
+      };
+      reader.readAsText(file);
     }
   }
 };

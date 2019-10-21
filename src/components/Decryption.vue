@@ -6,11 +6,29 @@
       clearable
       clear-icon="mdi-close-circle"
       label="Text to decrypt"
-      rows="1"
+      rows="2"
+      prepend-icon="mdi-pen"
       v-model="textToDecrypt"
       v-on:keyup="decrypt()"
       @click:clear="clear()"
     ></v-textarea>
+    <template>
+      <v-file-input
+        v-model="file"
+        placeholder="Upload your txt file"
+        label="File input (Optional)"
+        accept=".txt"
+        prepend-icon="mdi-paperclip"
+        show-size
+        @change="loadTextFromFile"
+      >
+        <template v-slot:selection="{ text }">
+          <v-chip small label color="purple">
+            {{ text }}
+          </v-chip>
+        </template>
+      </v-file-input>
+    </template>
     <p>{{ decryptedText }}</p>
   </v-col>
 </template>
@@ -21,7 +39,8 @@ export default {
   props: ["decryptionKey"],
   data: () => ({
     textToDecrypt: "",
-    decryptedText: ""
+    decryptedText: "",
+    file: null
   }),
   watch: {
     $props: {
@@ -54,6 +73,17 @@ export default {
     clear() {
       this.textToDecrypt = "";
       this.decryptedText = "";
+    },
+    loadTextFromFile() {
+      const file = this.file;
+      const reader = new FileReader();
+
+      //reader.onload = e => this.$emit("load", e.target.result);
+      reader.onload = e => {
+        this.textToDecrypt = e.target.result;
+        this.decrypt();
+      };
+      reader.readAsText(file);
     }
   }
 };
