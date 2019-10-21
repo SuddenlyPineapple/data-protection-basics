@@ -36,7 +36,7 @@
 <script>
 export default {
   name: "Encryption",
-  props: ["encryptionKey"],
+  props: ["encryptionKey", "baseAlphabet"],
   data: () => ({
     textToEncrypt: "",
     encryptedText: "",
@@ -55,9 +55,12 @@ export default {
     encrypt() {
       this.encryptedText = "";
 
-      if (this.textToEncrypt) {
+      if (
+        this.textToEncrypt &&
+        this.baseAlphabet == "abcdefghijklmnopqrstuvwxyz"
+      ) {
         this.textToEncrypt = this.textToEncrypt.toLowerCase();
-        this.encryptionKey = this.encryptionKey //TODO: Fix encryption key uncontroled mutation
+        this.encryptionKey = this.encryptionKey
           .toLowerCase()
           .replace(/[^a-z]/g, "");
 
@@ -73,6 +76,17 @@ export default {
               );
             else this.encryptedText += this.textToEncrypt.charAt(i);
           }
+        }
+      } else if (this.textToEncrypt) {
+        let re = new RegExp("[" + this.baseAlphabet + "]");
+        console.log(re);
+        this.encryptionKey = this.encryptionKey.toLowerCase();
+        for (let i = 0; i < this.textToEncrypt.length; i++) {
+          if (re.test(this.textToEncrypt.charAt(i))) {
+            this.encryptedText += this.encryptionKey.charAt(
+              this.baseAlphabet.indexOf(this.textToEncrypt[i])
+            );
+          } else this.encryptedText += this.textToEncrypt.charAt(i);
         }
       }
     },

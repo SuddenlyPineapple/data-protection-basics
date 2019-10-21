@@ -36,7 +36,7 @@
 <script>
 export default {
   name: "Decryption",
-  props: ["decryptionKey"],
+  props: ["decryptionKey", "baseAlphabet"],
   data: () => ({
     textToDecrypt: "",
     decryptedText: "",
@@ -54,17 +54,33 @@ export default {
   methods: {
     decrypt() {
       this.textToDecrypt = this.textToDecrypt.toLowerCase();
-      this.decryptionKey = this.decryptionKey
-        .toLowerCase()
-        .replace(/[^a-z]/g, "");
 
-      if (this.textToDecrypt.length >= 1 && this.decryptionKey.length === 26) {
+      if (this.baseAlphabet == "abcdefghijklmnopqrstuvwxyz") {
+        this.decryptionKey = this.decryptionKey
+          .toLowerCase()
+          .replace(/[^a-z]/g, "");
+
+        if (
+          this.textToDecrypt.length >= 1 &&
+          this.decryptionKey.length === 26
+        ) {
+          this.decryptedText = "";
+          var re = /[a-z]/;
+          for (let i = 0; i < this.textToDecrypt.length; i++) {
+            if (re.test(this.textToDecrypt.charAt(i)))
+              this.decryptedText += String.fromCharCode(
+                this.decryptionKey.indexOf(this.textToDecrypt.charAt(i)) + 97
+              );
+            else this.decryptedText += this.textToDecrypt.charAt(i);
+          }
+        }
+      } else {
         this.decryptedText = "";
-        var re = /[a-z]/;
+        let re = new RegExp("[" + this.baseAlphabet + "]");
         for (let i = 0; i < this.textToDecrypt.length; i++) {
           if (re.test(this.textToDecrypt.charAt(i)))
-            this.decryptedText += String.fromCharCode(
-              this.decryptionKey.indexOf(this.textToDecrypt.charAt(i)) + 97
+            this.decryptedText += this.baseAlphabet.charAt(
+              this.decryptionKey.indexOf(this.textToDecrypt.charAt(i))
             );
           else this.decryptedText += this.textToDecrypt.charAt(i);
         }

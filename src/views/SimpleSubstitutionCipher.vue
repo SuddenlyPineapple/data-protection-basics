@@ -8,7 +8,17 @@
           clearable
           clear-icon="mdi-close-circle"
           prepend-icon="mdi-pen"
-          label="Encryption key"
+          label="Base alphabet (Optional field - It will disable key validation. Use at your own risk!)"
+          placeholder="abcdefghijklmnopqrstuvwxyz"
+          v-model="baseAlphabet"
+          v-on:change="setAlphabetRules"
+        ></v-text-field>
+        <v-text-field
+          color="deep-purple"
+          clearable
+          clear-icon="mdi-close-circle"
+          prepend-icon="mdi-pen"
+          label="Encryption key (Based on above alphabet)"
           :rules="[rules.required, rules.alphabet]"
           v-model="encryptionKey"
           v-on:keyup="genKey"
@@ -29,8 +39,14 @@
           FILL KEY
         </v-btn>
       </v-col>
-      <Encryption v-bind:encryptionKey="passedKey" />
-      <Decryption v-bind:decryptionKey="passedKey" />
+      <Encryption
+        v-bind:encryptionKey="passedKey"
+        :baseAlphabet="baseAlphabet"
+      />
+      <Decryption
+        v-bind:decryptionKey="passedKey"
+        :baseAlphabet="baseAlphabet"
+      />
     </v-row>
     <v-row>
       <v-col cols="12">
@@ -114,13 +130,13 @@ export default {
   data: () => ({
     encryptionKey: "",
     passedKey: "",
+    baseAlphabet: "abcdefghijklmnopqrstuvwxyz",
     chars: "",
     fillDisabled: false,
     rules: {
       required: value => !!value || "Required!",
-      alphabet: value => {
-        const pattern = /^[abcdefghijklmnopqrstuvwxyz]+$/;
-        return pattern.test(value) || "Invalid character!";
+      alphabet: () => {
+        return true;
       }
     }
   }),
@@ -139,7 +155,7 @@ export default {
       this.fillDisabled = true;
     },
     genKey() {
-      var keychars = "abcdefghijklmnopqrstuvwxyz";
+      var keychars = this.baseAlphabet;
       var chars = keychars.split("");
 
       console.log(this.encryptionKey.length);
@@ -168,6 +184,17 @@ export default {
       //this.encryptionKey += this.chars;
       this.encryptionKey = this.passedKey;
       this.fillDisabled = true;
+    },
+    setAlphabetRules() {
+      this.rules.alphabet = value => {
+        if (this.baseAlphabet == "abcdefghijklmnopqrstuvwxyz") {
+          const pattern = /^[abcdefghijklmnopqrstuvwxyz]+$/;
+          return pattern.test(value) || "Invalid character!";
+        } else {
+          const pattern = new RegExp("^[" + this.baseAlphabet + "]+$");
+          return pattern.test(value) || "Character out of alphabet!";
+        }
+      };
     }
   }
 };
