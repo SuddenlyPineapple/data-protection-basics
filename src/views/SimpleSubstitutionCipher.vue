@@ -8,7 +8,7 @@
           clearable
           clear-icon="mdi-close-circle"
           prepend-icon="mdi-pen"
-          label="Base alphabet (Optional field - It will disable key validation. Use at your own risk!)"
+          label="Base alphabet (Optional field - you can enter here other charsets)"
           placeholder="abcdefghijklmnopqrstuvwxyz"
           v-model="baseAlphabet"
           v-on:change="setAlphabetRules"
@@ -94,7 +94,10 @@
       <v-col cols="12">
         <h1>Specification & restrictions:</h1>
         <ul>
-          <li>only english alphabet consisting of 26 chars,</li>
+          <li>
+            only english alphabet consisting of 26 chars (or you can define one
+            of your own),
+          </li>
           <li>you can also optionaly upload txt files</li>
           <li>
             it's possible to use special chars and chars specified for different
