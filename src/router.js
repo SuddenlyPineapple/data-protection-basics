@@ -30,6 +30,17 @@ export default new Router({
         import(
           /* webpackChunkName: "about" */ "./views/SimpleSubstitutionCipher.vue"
         )
+    },
+    {
+      path: "/self_decimation_generator",
+      name: "SelfDecimationGenerator",
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () =>
+        import(
+          /* webpackChunkName: "about" */ "./views/SelfDecimationGenerator.vue"
+        )
     }
   ]
 });

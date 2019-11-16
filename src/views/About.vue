@@ -16,7 +16,7 @@
         </h1>
         <p class="subheading font-weight-regular">
           I'm studying at Poznan University of Technology and work in Allegro -
-          the biggest ecommerce enterprice in Poland as Junior
+          one of the biggest ecommerce enterprise in Poland as Junior
           Front-end/Software Engineer. I like to develop my skills in
           programming and design. I also like good old rock and roll and
           american cars. For more information about me visit sites placed in

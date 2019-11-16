@@ -1,6 +1,6 @@
 <template>
   <v-col cols="12">
-    <h1>Decryption</h1>
+    <h2>Decryption</h2>
     <v-textarea
       color="deep-purple"
       clearable

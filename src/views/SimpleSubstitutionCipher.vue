@@ -2,7 +2,10 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <h1>Encryption Key</h1>
+        <h1>Simple Substitution Cipher</h1>
+      </v-col>
+      <v-col cols="12">
+        <h2>Encryption Key</h2>
         <v-text-field
           color="deep-purple"
           clearable
@@ -50,7 +53,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <h1>How to use?</h1>
+        <h2>How to use?</h2>
         <p>
           Simply generate key or type one of your own. Key is binded to
           textareas, so when you want to encrypt or decrypt message it will use
@@ -61,7 +64,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <h1>How algorithm works?</h1>
+        <h2>How algorithm works?</h2>
         <p>
           The whole algorithm consists of changing the alphabet and is very
           simple. Let's assume we want to encrypt our message with key
@@ -92,7 +95,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <h1>Specification & restrictions:</h1>
+        <h2>Specification & restrictions:</h2>
         <ul>
           <li>
             only english alphabet consisting of 26 chars (or you can define one
