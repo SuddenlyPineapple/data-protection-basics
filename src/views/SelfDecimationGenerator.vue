@@ -36,7 +36,7 @@
       </v-col>
 
       <v-col cols="12" sm="12" md="6">
-        <h2>Rueppel's <em>d</em> value:</h2>
+        <h2>Rueppel's <em>d</em> value</h2>
         <v-text-field
           color="deep-purple"
           clearable
@@ -51,7 +51,7 @@
       </v-col>
 
       <v-col cols="12" sm="12" md="6">
-        <h2>Rueppel's <em>k</em> value:</h2>
+        <h2>Rueppel's <em>k</em> value</h2>
         <v-text-field
           color="deep-purple"
           clearable
@@ -66,7 +66,7 @@
       </v-col>
 
       <v-col cols="12" sm="12" md="6">
-        <h2>Number of generated bits:</h2>
+        <h2>Number of generated bits</h2>
         <v-text-field
           color="deep-purple"
           clearable
@@ -107,8 +107,65 @@
       </v-col>
 
       <v-col cols="12" sm="12" md="6">
-        <h2>Zero/One Count: {{ zeros + "/" + ones }}</h2>
-        <h2>Period: {{ period }}</h2>
+        <h2>
+          Zero/One Count:
+          <span class="deep-purple--text">{{ zeros + "/" + ones }}</span>
+        </h2>
+        <h2>
+          Period: <span class="deep-purple--text">{{ period }}</span>
+        </h2>
+      </v-col>
+
+      <v-col cols="12">
+        <h2>Schematic</h2>
+        <v-img
+          :src="require('../assets/schema.png')"
+          contain
+          height="200"
+        ></v-img>
+        <p>Period formula: T = Floor(2/3 * T<sub>0</sub>)</p>
+
+        <h2>How to use?</h2>
+        <p>
+          Enter LFSR starting values (only 0 and 1 are allowed), then set XOR
+          logical gates on selected LFSR fields, by typing 0/1 string, which
+          must be the same lenght as LFSR register. For ex. if we set FLSR to
+          0101 and we want to have XOR on last two register fields, then XOR
+          Positions will be 0011. Then input d and k values (see at Schematic to
+          understand). Then you only must input number of bits to generate
+          (important info: Output will be refreshed when you lose focus on this
+          field).
+        </p>
+
+        <h2>How it works?</h2>
+        <p>
+          How LFSR Register work:
+          <a href="https://www.youtube.com/watch?v=8fhNPXus4-s">link</a><br />
+          Everything else is like on schema
+        </p>
+
+        <h2>Specification & restrictions:</h2>
+        <ul>
+          <li>
+            for lager amount of bits generation is much longer soo please if you
+            don't want to crash your browser generate maximum 10 000 bits,
+          </li>
+          <li>
+            you can also optionaly download txt files in binary and 0/1 txt
+            format
+          </li>
+          <li>
+            whole application is executing in your browser and hosted from
+            GitHub Pages, development happen on node server and with help of
+            webpack and npm,
+          </li>
+          <li>
+            when it's comes to how much bits you can generate this is only
+            limited by your browser and hardware possibilites, but in case of
+            more than 10 000 bits aplication performance pike down on almost
+            every computer.
+          </li>
+        </ul>
       </v-col>
     </v-row>
   </v-container>
@@ -154,8 +211,12 @@ export default {
           "XOR list must be the same length as LSFR register"
         );
       };
+
+      this.runGenerator();
     },
-    setXORpositions() {},
+    setXORpositions() {
+      this.runGenerator();
+    },
     calcPeriod() {
       if (parseInt(this.dValue) > 0 && parseInt(this.kValue) > 0) {
         this.period = Math.floor(
@@ -165,7 +226,11 @@ export default {
       }
     },
     runGenerator() {
-      if (!!this.numberOfBits && this.rules.numbers(this.numberOfBits)) {
+      if (
+        !!this.numberOfBits &&
+        this.rules.numbers(this.numberOfBits) &&
+        this.LFSRstartValues.length == this.XORpositions.length
+      ) {
         this.generator = this.initGenerator();
         let i = parseInt(this.numberOfBits);
         this.output = "";

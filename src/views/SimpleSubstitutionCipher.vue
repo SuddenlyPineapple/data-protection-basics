@@ -101,7 +101,7 @@
             only english alphabet consisting of 26 chars (or you can define one
             of your own),
           </li>
-          <li>you can also optionaly upload txt files</li>
+          <li>you can also optionaly upload txt files,</li>
           <li>
             it's possible to use special chars and chars specified for different
             languages but they won't be encrypted,
