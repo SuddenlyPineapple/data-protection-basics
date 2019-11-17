@@ -36,13 +36,43 @@
       </v-col>
 
       <v-col cols="12" sm="12" md="6">
+        <h2>Rueppel's <em>d</em> value:</h2>
+        <v-text-field
+          color="deep-purple"
+          clearable
+          clear-icon="mdi-close-circle"
+          prepend-icon="mdi-pen"
+          label="Rueppels d ticks value (recomended max. 10 - huge imapct on performance)"
+          placeholder="for ex. 8"
+          v-model="dValue"
+          v-on:keyup="calcPeriod"
+          :rules="[rules.required, rules.numbers]"
+        ></v-text-field>
+      </v-col>
+
+      <v-col cols="12" sm="12" md="6">
+        <h2>Rueppel's <em>k</em> value:</h2>
+        <v-text-field
+          color="deep-purple"
+          clearable
+          clear-icon="mdi-close-circle"
+          prepend-icon="mdi-pen"
+          label="Rueppels k ticks value (recomended max. 10 - huge imapct on performance)"
+          placeholder="for ex. 5"
+          v-model="kValue"
+          v-on:keyup="calcPeriod"
+          :rules="[rules.required, rules.numbers]"
+        ></v-text-field>
+      </v-col>
+
+      <v-col cols="12" sm="12" md="6">
         <h2>Number of generated bits:</h2>
         <v-text-field
           color="deep-purple"
           clearable
           clear-icon="mdi-close-circle"
           prepend-icon="mdi-pen"
-          label="Amount of bits to generate"
+          label="Amount of bits to generate (this filed is activated while it's loose focus due performace issues)"
           placeholder="for ex. 50"
           v-model="numberOfBits"
           v-on:change="runGenerator"
@@ -63,16 +93,30 @@
 
       <v-col cols="12" sm="12" md="6">
         <h2>File Output</h2>
+        <v-row class="mt-2">
+          <v-btn color="deep-purple" class="white--text" @click="saveOutput">
+            Download Output
+          </v-btn>
+          <v-checkbox
+            color="deep-purple"
+            v-model="binary"
+            label="Binary (default is text)"
+            class="mt-1 ml-3"
+          />
+        </v-row>
       </v-col>
 
       <v-col cols="12" sm="12" md="6">
-        <h2>Zero/One Count:</h2>
+        <h2>Zero/One Count: {{ zeros + "/" + ones }}</h2>
+        <h2>Period: {{ period }}</h2>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+//import { saveAs } from "file-saver";
+
 export default {
   name: "SelfDecimationGenerator",
 
@@ -80,6 +124,12 @@ export default {
     LFSRstartValues: "",
     XORpositions: "",
     numberOfBits: "",
+    kValue: null,
+    dValue: null,
+    period: "",
+    zeros: 0,
+    binary: false,
+    ones: 0,
     rules: {
       required: value => !!value || "Required!",
       sizing: () => {
@@ -106,14 +156,24 @@ export default {
       };
     },
     setXORpositions() {},
+    calcPeriod() {
+      if (parseInt(this.dValue) > 0 && parseInt(this.kValue) > 0) {
+        this.period = Math.floor(
+          (parseInt(this.kValue) + parseInt(this.dValue)) / 3
+        );
+        this.runGenerator();
+      }
+    },
     runGenerator() {
       if (!!this.numberOfBits && this.rules.numbers(this.numberOfBits)) {
         this.generator = this.initGenerator();
         let i = parseInt(this.numberOfBits);
         this.output = "";
 
-        const d = 3;
-        const k = 8;
+        this.zeros = 0;
+        this.ones = 0;
+        const d = this.dValue;
+        const k = this.kValue;
         let start = this.generator.next().value;
         console.log("start: ", start);
 
@@ -130,6 +190,7 @@ export default {
           }
           this.output += out;
           start = out;
+          out == 1 ? this.ones++ : this.zeros++;
           console.log("get: ", out);
           i--;
         }
@@ -166,6 +227,34 @@ export default {
 
         yield XorSum % 2;
       }
+    },
+    saveOutput() {
+      var FileSaver = require("file-saver");
+      var blob = null;
+
+      if (this.binary) {
+        let char = null;
+        var binaryOut = "";
+
+        for (let i = 0; i < this.output.length; i += 8) {
+          if (i + 8 > this.output.length)
+            char = this.output.slice(i, this.output.length - 1);
+          else char = this.output.slice(i, i + 8);
+
+          binaryOut += String.fromCharCode(parseInt(char, 2));
+          //console.log(char);
+        }
+        console.log(binaryOut);
+        blob = new Blob([binaryOut], {
+          type: "text/plain;charset=utf-8"
+        });
+      } else {
+        blob = new Blob([this.output], {
+          type: "text/plain;charset=utf-8"
+        });
+      }
+
+      FileSaver.saveAs(blob, "output.txt");
     }
   }
 };
