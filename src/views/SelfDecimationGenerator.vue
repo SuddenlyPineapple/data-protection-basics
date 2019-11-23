@@ -129,93 +129,11 @@
         </h2> -->
       </v-col>
 
-      <v-col cols="12">
-        <h2>Encryption using generated hash</h2>
-
-        <v-textarea
-          color="deep-purple"
-          clearable
-          clear-icon="mdi-close-circle"
-          label="Text to encrypt"
-          rows="2"
-          prepend-icon="mdi-pen"
-          v-model="textToEncrypt"
-          v-on:keyup="encrypt()"
-          @click:clear="clear()"
-          :rules="[rules.cipherMax]"
-        ></v-textarea>
-
-        <template>
-          <v-file-input
-            v-model="fileToEncrypt"
-            placeholder="Upload your txt file"
-            label="File input (Optional)"
-            accept=".txt"
-            prepend-icon="mdi-paperclip"
-            show-size
-            @change="loadTextFromFile"
-          >
-            <template v-slot:selection="{ text }">
-              <v-chip small label color="purple">
-                {{ text }}
-              </v-chip>
-            </template>
-          </v-file-input>
-        </template>
-
-        <v-textarea
-          color="deep-purple"
-          readonly
-          label="Encrypt output"
-          prepend-icon="mdi-eye"
-          placeholder="Encrypted text (readonly)..."
-          v-model="encryptedText"
-        ></v-textarea>
-      </v-col>
-
-      <v-col cols="12">
-        <h2>Decryption using generated hash</h2>
-
-        <v-textarea
-          color="deep-purple"
-          clearable
-          clear-icon="mdi-close-circle"
-          label="Text to decrypt"
-          rows="2"
-          prepend-icon="mdi-pen"
-          v-model="textToDecrypt"
-          v-on:keyup="decrypt()"
-          @click:clear="clearDecryption()"
-          :rules="[rules.cipherMax]"
-        ></v-textarea>
-
-        <template>
-          <v-file-input
-            v-model="fileToDecrypt"
-            placeholder="Upload your txt file"
-            label="File input (Optional)"
-            accept=".txt"
-            prepend-icon="mdi-paperclip"
-            show-size
-            @change="loadTextFromFile"
-          >
-            <template v-slot:selection="{ text }">
-              <v-chip small label color="purple">
-                {{ text }}
-              </v-chip>
-            </template>
-          </v-file-input>
-        </template>
-
-        <v-textarea
-          color="deep-purple"
-          readonly
-          label="Decrypt output"
-          prepend-icon="mdi-eye"
-          placeholder="Decrypted text (readonly)..."
-          v-model="decryptedText"
-        ></v-textarea>
-      </v-col>
+      <HashCipher
+        header="Decryption using generated hash"
+        v-bind:hash="output"
+        v-bind:rules="rules.cipherMax"
+      ></HashCipher>
 
       <v-col cols="12">
         <h2>Schematic</h2>
@@ -238,6 +156,14 @@
           field).
         </p>
 
+        <p>
+          To encrypt or decrypt something, first generate long hash using
+          Ruppel's generator. Then enter text to decrypt. If you want to pass
+          encrypted text to other person for decipher, you can pass also LFSR
+          register state, XOR and d,k setup. Then other person can decipher
+          message.
+        </p>
+
         <h2>How it works?</h2>
         <p>
           How LFSR Register work:
@@ -249,7 +175,7 @@
         <ul>
           <li>
             for lager amount of bits generation is much longer soo please if you
-            don't want to crash your browser generate maximum 10 000 bits,
+            don't want to crash your browser generate maximum 10 000 000 bits,
           </li>
           <li>
             you can also optionaly download txt files in binary and 0/1 txt
@@ -263,8 +189,12 @@
           <li>
             when it's comes to how much bits you can generate this is only
             limited by your browser and hardware possibilites, but in case of
-            more than 10 000 bits aplication performance pike down on almost
+            more than 10 000 000 bits aplication performance pike down on almost
             every computer.
+          </li>
+          <li>
+            if you want to see step-by-step process please generate no more than
+            10 000 bits. Otherwise your browser will crash.
           </li>
         </ul>
       </v-col>
@@ -277,6 +207,10 @@
 
 export default {
   name: "SelfDecimationGenerator",
+
+  components: {
+    HashCipher: () => import("@/components/hashCipher.vue")
+  },
 
   data: () => ({
     //LFSR Generator Variables
@@ -449,79 +383,6 @@ export default {
       }
 
       FileSaver.saveAs(blob, "output.txt");
-    },
-    loadTextFromFile() {
-      const file = this.fileToEncrypt;
-      const reader = new FileReader();
-
-      //reader.onload = e => this.$emit("load", e.target.result);
-      reader.onload = e => {
-        this.textToEncrypt = e.target.result;
-        this.encrypt();
-      };
-      reader.readAsText(file);
-    },
-    encrypt() {
-      this.encryptedText = "";
-
-      if (this.output !== "") {
-        let hashCounter = 0;
-
-        for (let i = 0; i < this.textToEncrypt.length; i++) {
-          const charBits = this.textToEncrypt[i].charCodeAt(0).toString(2);
-
-          const hashSlice = this.output.slice(hashCounter, hashCounter + 8);
-          hashCounter += 8;
-
-          // For Debugging Purpose
-          // console.log(
-          //   charBits,
-          //   hashSlice,
-          //   (parseInt(charBits, 2) ^ parseInt(hashSlice, 2)).toString(2),
-          //   parseInt(charBits, 2) ^ parseInt(hashSlice, 2),
-          //   String.fromCharCode(parseInt(charBits, 2) ^ parseInt(hashSlice, 2))
-          // );
-
-          this.encryptedText += String.fromCharCode(
-            parseInt(charBits, 2) ^ parseInt(hashSlice, 2)
-          );
-        }
-      }
-    },
-    decrypt() {
-      this.decryptedText = "";
-
-      if (this.output !== "") {
-        let hashCounter = 0;
-
-        for (let i = 0; i < this.textToDecrypt.length; i++) {
-          const charBits = this.textToDecrypt[i].charCodeAt(0).toString(2);
-
-          const hashSlice = this.output.slice(hashCounter, hashCounter + 8);
-          hashCounter += 8;
-
-          // For Debugging Purpose
-          // console.log(
-          //   charBits,
-          //   hashSlice,
-          //   (parseInt(charBits, 2) ^ parseInt(hashSlice, 2)).toString(2),
-          //   parseInt(charBits, 2) ^ parseInt(hashSlice, 2),
-          //   String.fromCharCode(parseInt(charBits, 2) ^ parseInt(hashSlice, 2))
-          // );
-
-          this.decryptedText += String.fromCharCode(
-            parseInt(charBits, 2) ^ parseInt(hashSlice, 2)
-          );
-        }
-      }
-    },
-    clear() {
-      this.textToEncrypt = "";
-      this.encryptedText = "";
-    },
-    clearDecryption() {
-      this.textToDecrypt = "";
-      this.decryptedText = "";
     }
   }
 };
