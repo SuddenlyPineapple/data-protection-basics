@@ -80,6 +80,18 @@
         ></v-text-field>
       </v-col>
 
+      <v-col cols="12" sm="12" md="6">
+        <h2>Step-by-step process</h2>
+        <v-row class="mt-2">
+          <v-checkbox
+            color="deep-purple"
+            v-model="logs"
+            label="Step-by-step process (available in browser console, CAN CRUSH YOUR BROWSER!!!)"
+            class="mt-1 ml-3"
+          />
+        </v-row>
+      </v-col>
+
       <v-col cols="12" sm="12" md="12">
         <h2>Output</h2>
         <v-textarea
@@ -187,6 +199,7 @@ export default {
     zeros: 0,
     binary: false,
     ones: 0,
+    logs: false,
     rules: {
       required: value => !!value || "Required!",
       sizing: () => {
@@ -240,7 +253,7 @@ export default {
         const d = this.dValue;
         const k = this.kValue;
         let start = this.generator.next().value;
-        console.log("start: ", start);
+        if (this.logs) console.log("start: ", start);
 
         while (i > 0) {
           let out = null;
@@ -256,7 +269,9 @@ export default {
           this.output += out;
           start = out;
           out == 1 ? this.ones++ : this.zeros++;
-          console.log("get: ", out);
+
+          if (this.logs) console.log("get: ", out);
+
           i--;
         }
       }
@@ -276,8 +291,8 @@ export default {
       );
       let XORs = getOnesPositions(this.XORpositions);
 
-      console.log("LFSR: ", LFSR);
-      console.log("XORpos: ", XORs);
+      if (this.logs) console.log("LFSR: ", LFSR);
+      if (this.logs) console.log("XORpos: ", XORs);
 
       while (true) {
         let XorSum = 0;
@@ -288,7 +303,7 @@ export default {
 
         LFSR.pop();
         LFSR.unshift(XorSum % 2);
-        console.log(LFSR);
+        if (this.logs) console.log(LFSR);
 
         yield XorSum % 2;
       }
@@ -309,7 +324,7 @@ export default {
           binaryOut += String.fromCharCode(parseInt(char, 2));
           //console.log(char);
         }
-        console.log(binaryOut);
+        //console.log(binaryOut);
         blob = new Blob([binaryOut], {
           type: "text/plain;charset=utf-8"
         });
@@ -320,6 +335,12 @@ export default {
       }
 
       FileSaver.saveAs(blob, "output.txt");
+    },
+    encrypt() {
+      console.log("Encrypt");
+    },
+    decrypt() {
+      console.log("Decrypt");
     }
   }
 };
