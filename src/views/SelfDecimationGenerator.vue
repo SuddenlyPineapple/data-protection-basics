@@ -142,6 +142,7 @@
           v-model="textToEncrypt"
           v-on:keyup="encrypt()"
           @click:clear="clear()"
+          :rules="[rules.cipherMax]"
         ></v-textarea>
 
         <template>
@@ -185,6 +186,7 @@
           v-model="textToDecrypt"
           v-on:keyup="decrypt()"
           @click:clear="clearDecryption()"
+          :rules="[rules.cipherMax]"
         ></v-textarea>
 
         <template>
@@ -307,6 +309,9 @@ export default {
       sizing: () => {
         return true;
       },
+      cipherMax: () => {
+        return true;
+      },
       zeroOnes: value =>
         (!!value && !!value.match(new RegExp(/^[0-1]*$/g))) ||
         "Only zero and one numbers are allowed in string!",
@@ -376,6 +381,13 @@ export default {
 
           i--;
         }
+
+        this.rules.cipherMax = value => {
+          return (
+            (!!value && value.length < this.output.length / 8) ||
+            "Entered text has more bits than generated hash. Generate longer hash!"
+          );
+        };
       }
     },
     //Only LFSR Register Generator
