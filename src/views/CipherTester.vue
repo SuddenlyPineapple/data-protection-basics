@@ -212,7 +212,7 @@ export default {
           sum += number * number;
         });
 
-        p = (16.0 / 5000.0) * sum;
+        p = (16.0 / 5000.0) * sum - 5000;
         console.log("Poker Test", p);
 
         if (p < 46.17 && p > 2.16) return true;
@@ -224,28 +224,38 @@ export default {
         this.seriesTestRun = true;
 
         let tmp = this.cipher[0];
-        let series = [0, 0, 0, 0, 0, 0];
+        let series0 = [0, 0, 0, 0, 0, 0];
+        let series1 = [0, 0, 0, 0, 0, 0];
         let n = 0;
 
         for (let i = 0; i < this.cipher.length; i++) {
           if (this.cipher[i] == tmp) n++;
           else {
-            n > 5 ? (series[5] += 1) : (series[n - 1] += 1);
+            if (this.cipher[i] == 0) {
+              n > 5 ? (series0[5] += 1) : (series0[n - 1] += 1);
+            } else n > 5 ? (series1[5] += 1) : (series1[n - 1] += 1);
             n = 1;
-            tmp = this.cipher[0];
+            tmp = this.cipher[i];
           }
         }
 
-        console.log("Runs Test:", series);
+        console.log("Runs Test:", series0, series1);
 
         if (
-          series[0] < 2685 &&
-          series[0] > 2315 &&
-          (series[1] < 1386 && series[1] > 1114) &&
-          (series[2] < 723 && series[2] > 527) &&
-          (series[3] < 384 && series[3] > 240) &&
-          (series[4] < 209 && series[4] > 103) &&
-          (series[5] < 209 && series[5] > 103)
+          series0[0] < 2685 &&
+          series0[0] > 2315 &&
+          (series0[1] < 1386 && series0[1] > 1114) &&
+          (series0[2] < 723 && series0[2] > 527) &&
+          (series0[3] < 384 && series0[3] > 240) &&
+          (series0[4] < 209 && series0[4] > 103) &&
+          (series0[5] < 209 && series0[5] > 103) &&
+          series1[0] < 2685 &&
+          series1[0] > 2315 &&
+          (series1[1] < 1386 && series1[1] > 1114) &&
+          (series1[2] < 723 && series1[2] > 527) &&
+          (series1[3] < 384 && series1[3] > 240) &&
+          (series1[4] < 209 && series1[4] > 103) &&
+          (series1[5] < 209 && series1[5] > 103)
         ) {
           return true;
         }
