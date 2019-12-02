@@ -1,6 +1,6 @@
 <template>
   <v-col cols="12">
-    <h2>Encrypt/decrypt using generated hash</h2>
+    <h2>Encrypt/decrypt using generated key</h2>
 
     <v-textarea
       color="deep-purple"
@@ -13,6 +13,7 @@
       v-on:keyup="encrypt()"
       @click:clear="clear()"
       :rules="[rules]"
+      counter
     ></v-textarea>
 
     <template>
@@ -33,9 +34,23 @@
       </v-file-input>
     </template>
 
+    <v-row class="mt-2">
+      <v-checkbox
+        color="deep-purple"
+        v-model="binary"
+        label="Set output to Binary String (default is Binary Text) then Encrypt again =>"
+        class="mt-0 ml-3 mb-0"
+      />
+
+      <v-btn color="deep-purple" class="white--text ml-4" @click="encrypt">
+        Encrypt
+      </v-btn>
+    </v-row>
+
     <v-textarea
       color="deep-purple"
       readonly
+      counter
       label="Encrypt/decrypt output"
       prepend-icon="mdi-eye"
       placeholder="Encrypted/decrypted text (readonly)..."
@@ -49,6 +64,8 @@ export default {
   name: "hashCipher",
   props: ["rules", "hash"],
   data: () => ({
+    binary: false,
+
     //Logs
     logs: false,
 
@@ -91,9 +108,15 @@ export default {
           //   String.fromCharCode(parseInt(charBits, 2) ^ parseInt(hashSlice, 2))
           // );
 
-          this.encryptedText += String.fromCharCode(
-            parseInt(charBits, 2) ^ parseInt(hashSlice, 2)
-          );
+          if (this.binary) {
+            this.encryptedText += (
+              parseInt(charBits, 2) ^ parseInt(hashSlice, 2)
+            ).toString(2);
+          } else {
+            this.encryptedText += String.fromCharCode(
+              parseInt(charBits, 2) ^ parseInt(hashSlice, 2)
+            );
+          }
         }
       }
     },

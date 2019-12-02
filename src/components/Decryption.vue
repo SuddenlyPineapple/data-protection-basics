@@ -4,6 +4,7 @@
     <v-textarea
       color="deep-purple"
       clearable
+      counter
       clear-icon="mdi-close-circle"
       label="Text to decrypt"
       rows="2"

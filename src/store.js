@@ -20,6 +20,10 @@ export default new Vuex.Store({
         to: "/self_decimation_generator"
       },
       {
+        text: "Cipher Tester",
+        to: "cipher_tester"
+      },
+      {
         text: "About",
         to: "/about"
       }

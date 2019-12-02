@@ -101,6 +101,7 @@
           prepend-icon="mdi-eye"
           placeholder="Your output is empty, because of empty fields above!"
           v-model="output"
+          counter
         ></v-textarea>
       </v-col>
 
