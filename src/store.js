@@ -24,6 +24,10 @@ export default new Vuex.Store({
         to: "cipher_tester"
       },
       {
+        text: "Steganography",
+        to: "/steganography"
+      },
+      {
         text: "About",
         to: "/about"
       }
