@@ -3,6 +3,23 @@
     <v-row>
       <v-col cols="12">
         <h2>Encryption</h2>
+        <template>
+          <v-file-input
+            v-model="textFile"
+            placeholder="Upload your txt file"
+            label="File input (Optional)"
+            accept=".txt"
+            prepend-icon="mdi-paperclip"
+            show-size
+            @change="loadTextFromFile"
+          >
+            <template v-slot:selection="{ text }">
+              <v-chip small label color="purple">
+                {{ text }}
+              </v-chip>
+            </template>
+          </v-file-input>
+        </template>
         <v-textarea
           color="deep-purple"
           clearable
@@ -88,7 +105,7 @@ export default {
 
       this.error = "";
       if (
-        originalImage.width * originalImage.height <
+        originalImage.width * originalImage.height * 3 <
         this.textToEncrypt.length * 8
       )
         this.error = "Error: Text is to long to encrypt on this image.";
@@ -123,7 +140,7 @@ export default {
           );
         }
 
-        console.log(binaryText);
+        //console.log(binaryText);
 
         String.prototype.replaceAt = function(index, replacement) {
           return (
@@ -173,6 +190,18 @@ export default {
       else {
         this.originalImage = "";
         this.processedImage = "";
+      }
+    },
+    loadTextFromFile() {
+      if (this.textFile) {
+        const file = this.textFile;
+        const reader = new FileReader();
+
+        //reader.onload = e => this.$emit("load", e.target.result);
+        reader.onload = e => {
+          this.textToEncrypt = e.target.result;
+        };
+        reader.readAsText(file);
       }
     },
     clear() {

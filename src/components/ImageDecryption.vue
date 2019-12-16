@@ -97,7 +97,7 @@ export default {
         binaryString += red.charAt(7) + green.charAt(7) + blue.charAt(7);
       }
 
-      console.log(binaryString);
+      //console.log(binaryString);
 
       for (let i = 0; i < binaryString.length; i += 8) {
         //console.log(binaryString.substring(i, i + 8));
