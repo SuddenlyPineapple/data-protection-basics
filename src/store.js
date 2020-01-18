@@ -28,6 +28,10 @@ export default new Vuex.Store({
         to: "/steganography"
       },
       {
+        text: "Visual Cryptography",
+        to: "/visualcryptography"
+      },
+      {
         text: "About",
         to: "/about"
       }
